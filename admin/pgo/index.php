@@ -1,5 +1,6 @@
 <?php
 $section = "pgo";
+$pageSection = "index";
 include("process/auth.php");
 include('../../functions.php');
 

@@ -13,9 +13,10 @@ if (isset($_POST['submitForm'])) {
 	$address = $conn->real_escape_string($_POST['address']);
 	$purpose = $conn->real_escape_string($_POST['purpose']);
 	$remarks = $conn->real_escape_string($_POST['remarks']);
+	$company = $conn->real_escape_string($_POST['company']);
 
 	if (($fname!="")&&($lname!="")&&($contact!="")&&($email!="")&&($address!="")&&($purpose!="")&&($remarks!="")) {
-		$sql = "INSERT INTO obr_requests (fname,lname,contact,email,address,purpose,remarks) VALUES ('$fname','$lname','$contact','$email','$address','$purpose','$remarks')";
+		$sql = "INSERT INTO obr_requests (fname,lname,contact,email,address,purpose,remarks,company) VALUES ('$fname','$lname','$contact','$email','$address','$purpose','$remarks','$company')";
 		if ($conn->query($sql)) {
 			echo "<script>Swal.fire('Success','Request Submitted.','success');</script>";
 		}
@@ -65,6 +66,12 @@ elseif (!isset($_POST['confirm'])) {
 							<div class="form-group">
 								<label for="">Email</label>
 								<input type="email" class="form-control" name="email" id="email">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label for="">Company</label>
+								<input type="text" class="form-control" name="company" id="company">
 							</div>
 						</div>
 						<div class="col-sm-12">
