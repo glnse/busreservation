@@ -21,9 +21,9 @@ if (isset($_POST['bus'])) {
     $net_capacity = $_POST['net_capacity'];
     $or_no = $_POST['or_no'];
     $or_date = $_POST['or_date'];
-    $sql = "INSERT INTO obr_buses (bus_name,mvfile_no,plate_no,engine_no,chassis_no,denomination,piston_displacement,no_of_cylinders,fuel,make,series,body_type,body_no,year_model,gross_wt,net_wt,shipping_wt,net_capacity,or_no,or_date) VALUES ('$bus','$mvfile_no','$plate_no','$engine_no','$chassis_no','$denomination','$piston_displacement','$no_of_cylinders','$fuel','$make','$series','$body_type','$body_no','$year_model','$gross_wt','$net_wt','$shipping_wt','$net_capacity','$or_no','$or_date')";
+    $sql = "UPDATE obr_buses SET bus_name = '$bus', mvfile_no = '$mvfile_no', plate_no = '$plate_no', chassis_no = '$chassis_no', denomination = '$denomination', piston_displacement = '$piston_displacement', no_of_cylinders = '$no_of_cylinders', fuel = '$fuel', make = '$make', series = '$series', body_type = '$body_type', body_no = '$body_no', year_model= '$year_model', gross_wt = '$gross_wt', net_wt = '$net_wt', shipping_wt = '$shipping_wt', net_capacity = '$net_capacity', or_no = '$or_no', or_date = '$or_date'";
     if ($conn->query($sql) or die($conn->error)) {
-        echo "<script>alert('Bus Added');window.location.href='../index.php';</script>";
+        echo "<script>alert('Bus Updated');window.location.href='../index.php';</script>";
     } else {
         echo "<script>alert('Server Error. Please try again.');window.location.href='../index.php';</script>";
     }

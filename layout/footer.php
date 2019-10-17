@@ -22,13 +22,20 @@
 					<div id="purpose"></div><br/>
 					<strong>Remarks: </strong>
 					<div id="remarks"></div>
+					<div id="enterDate">
+					<hr/>
+					<strong>Enter Reservation Date: </strong>&nbsp<input type="date" id="targetDate" onchange="availBus();"/>
+					</div>
+					<div id="availableBus"></div>
 				</div>
-				<div class="modal-footer">
+				<div class="modal-footer" id="footerModal">
 					<form id="statusSet" action="process/status_set.php" method="POST">
 						<input type="hidden" id="request_id" name="id">
 						<input type="hidden" id="status" name="status">
+						<input type="hidden" id="bus_id" name="bus_id">
+						<input type="hidden" id="reserve_date" name="reserve_date">
 					</form>
-					<button class="btn btn-success" type="button" id="acceptBtn" onclick="statusSet('accept')">Accept</button>
+					<button class="btn btn-success" type="button" id="acceptBtn" onclick="statusSet('accept')" disabled>Accept</button>
 					<button class="btn btn-danger" type="button" id="rejectBtn" onclick="statusSet('reject')">Reject</button>
 				</div>
 			</div>
@@ -48,20 +55,65 @@
 					<button class="close" type="button" data-dismiss="modal"><span>&times;</span></button>
 				</div>
 				<div class="modal-body">
-					<p>
-						<strong>Bus Name: </strong><span id="busname"></span><br/>
-						<strong>Status: </strong><span id="status"></span><br/>
-					</p>
-					<hr/>
-					<center><h3>Schedules</h3></center>
-					<div class="table-responsive">
-						<table class="table" id="data_sched">
-						</table>
+					<div class="row">
+						<div class="col-sm-12">
+							<p style="margin-bottom: 2px;">
+								<form id="switchStat" action="process/switch_status.php" method="POST">
+									<input type="hidden" name="bus_id" id="switchStatId">
+									<input type="hidden" name="status" id="status_name">
+									<input type="hidden" name="driver" id="driver_holder">
+									<input type="hidden" name="place" id="place_holder">
+								</form>
+								<strong>Bus Name: </strong><span id="busname"></span><br/>
+								<strong>Status: </strong><span id="status"></span><br/>
+								<div id="ifOnTrip" style="display:none;">
+									<strong>Driver Name: </strong><span id="driver_name"></span><br/>
+									<strong>Place: </strong><span id="place_name"></span><br/>
+								</div>
+								Change Status to:
+								<div id="statusBtn" style="margin-top: 0;">
+									<button class="btn btn-info btn-sm" type="button" id="onTripBtn" data-toggle="modal" data-target="#onTripModal">On Trip</button>
+									<button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#maintainBus" id="maintainBtn">Maintenance</button>
+								</div>
+							</p>
+							<h3>Bus Information</h3>
+							<p>
+								<strong>MV FILE NO.: </strong><span id="mvfile_no"></span><br/>
+								<strong>PLATE NO.: </strong><span id="plate_no"></span><br/>
+								<strong>ENGINE NO.: </strong><span id="engine_no"></span><br/>
+								<strong>CHASSIS NO.: </strong><span id="chassis_no"></span><br/>
+								<strong>DENOMINATION NO.: </strong><span id="denomination"></span><br/>
+								<strong>PISTON DISPLACEMENT: </strong><span id="piston_displacement"></span><br/>
+								<strong>NO. OF CYLINDERS: </strong><span id="no_of_cylinders"></span><br/>
+								<strong>FUEL: </strong><span id="fuel"></span><br/>
+								<strong>MAKE: </strong><span id="make"></span><br/>
+								<strong>SERIES: </strong><span id="series"></span><br/>
+								<strong>BODY TYPE: </strong><span id="body_type"></span><br/>
+								<strong>BODY NO.: </strong><span id="body_no"></span><br/>
+								<strong>YEAR MODEL: </strong><span id="year_model"></span><br/>
+								<strong>GROSS WT.: </strong><span id="gross_wt"></span><br/>
+								<strong>NET WT.: </strong><span id="net_wt"></span><br/>
+								<strong>SHIPPING WT.: </strong><span id="shipping_wt"></span><br/>
+								<strong>NET CAPACITY: </strong><span id="net_capacity"></span><br/>
+								<strong>OR NO.: </strong><span id="or_no"></span><br/>
+								<strong>OR DATE.: </strong><span id="or_date"></span><br/>
+							</p>
+						</div>
+						<div class="col-sm-6">
+							<div style="display:none;">
+								<center><h3>Schedules</h3></center>
+								<div class="table-responsive">
+									<table class="table" id="data_sched">
+									</table>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-success" type="button" id="addSchedBtn" data-toggle="modal" data-target="#schedBus">Add Schedule</button>
-					<!-- <button class="btn btn-info" type="button">Edit</button> -->
+					<!-- <button class="btn btn-success" type="button" id="addSchedBtn" data-toggle="modal" data-target="#schedBus">Add Schedule</button> -->
+					<button class="btn btn-warning" type="button" id="historyBtn">History</button>
+					<button class="btn btn-info" type="button" id="editBtn">Edit</button>
 					<button class="btn btn-danger" type="button" id="deleteBtn">Delete Bus</button>
 				</div>
 			</div>
@@ -78,7 +130,45 @@
 					<div class="form-group">
 						<form id="addBusSubmit" action="process/add_bus.php" method="POST">
 							<label>Bus Name</label>
-							<input type="text" class="form-control" name="bus"> 
+							<input type="text" class="form-control" name="bus">
+							<label>MV FILE NO.</label>
+							<input type="text" class="form-control" name="mvfile_no"> 
+							<label>PLATE NO.</label>
+							<input type="text" class="form-control" name="plate_no"> 
+							<label>ENGINE NO.</label>
+							<input type="text" class="form-control" name="engine_no"> 
+							<label>CHASSIS NO.</label>
+							<input type="text" class="form-control" name="chassis_no"> 
+							<label>DENOMINATION</label>
+							<input type="text" class="form-control" name="denomination"> 
+							<label>PISTON DISPLACEMENT</label>
+							<input type="text" class="form-control" name="piston_displacement"> 
+							<label>NO. OF CYLINDERS</label>
+							<input type="text" class="form-control" name="no_of_cylinders"> 
+							<label>FUEL</label>
+							<input type="text" class="form-control" name="fuel"> 
+							<label>MAKE</label>
+							<input type="text" class="form-control" name="make"> 
+							<label>SERIES</label>
+							<input type="text" class="form-control" name="series"> 
+							<label>BODY TYPE</label>
+							<input type="text" class="form-control" name="body_type"> 
+							<label>BODY NO.</label>
+							<input type="text" class="form-control" name="body_no"> 
+							<label>YEAR MODEL</label>
+							<input type="text" class="form-control" name="year_model"> 
+							<label>GROSS WT.</label>
+							<input type="text" class="form-control" name="gross_wt"> 
+							<label>NET WT.</label>
+							<input type="text" class="form-control" name="net_wt"> 
+							<label>SHIPPING WT.</label>
+							<input type="text" class="form-control" name="shipping_wt"> 
+							<label>NET CAPACITY</label>
+							<input type="text" class="form-control" name="net_capacity">
+							<label>OR NO.</label>
+							<input type="text" class="form-control" name="or_no">
+							<label>OR DATE</label>
+							<input type="date" class="form-control" name="or_date">   
 						</form>
 					</div>
 				</div>
@@ -104,6 +194,51 @@
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-success" type="button" onclick="addScheduleToServer();">Add</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="maintainBus" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Maintenance</h5>
+					<button class="close" type="button" data-dismiss="modal"><span>&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<form action="process/bus_maintain.php" method="POST" id="maintainForm">
+							<label>Enter Remarks:</label>
+							<input type="hidden" id="bus_id_maintain" name="bus_id"> 
+							<textarea name="remarks" class="form-control" id="remarksSet"></textarea>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" type="button" onclick="markedAsMaintenance();">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="onTripModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Details</h5>
+					<button class="close" type="button" data-dismiss="modal"><span>&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<form action="process/bus_maintain.php" method="POST" id="maintainForm">
+							<label>Driver Name:</label>
+							<input name="driver" class="form-control" id="driver">
+							<label>Place:</label>
+							<input name="place" class="form-control" id="place">
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-success" type="button" id="onTripSubmitBtn">Submit</button>
 				</div>
 			</div>
 		</div>
@@ -187,6 +322,10 @@
 					document.getElementById('purpose').innerHTML = obj[0].purpose;
 					document.getElementById('remarks').innerHTML = obj[0].remarks;
 					document.getElementById('request_id').value = obj[0].id;
+					if ((obj[0].status == "accepted")||(obj[0].status == "rejected")){
+						document.getElementById('footerModal').style.display = "none";
+						document.getElementById('enterDate').style.display = "none";
+					}
 				}
 			});
 		}
@@ -196,6 +335,42 @@
 			document.getElementById('statusSet').submit();
 		}
 
+		function availBus(){
+			var reserve_date = document.getElementById('targetDate').value;
+			$.ajax({
+				url: 'process/check_bus.php',
+				type: 'get',
+				data: {
+					date: reserve_date
+				},
+				success: function(r){
+					var obj = JSON.parse(r);
+					if (obj.length > 0){
+						document.getElementById('acceptBtn').setAttribute("disabled","");
+						var loopCnt = obj.length;
+						var loop = 0;
+						var display = "<strong>Choose Bus: </strong>&nbsp<select id='choose_bus' onchange='getData();'>";
+						display += "<option disabled selected>Choose Bus</option>";
+						while (loop < loopCnt){
+							display += "<option value='"+obj[loop].id+"'>"+obj[loop].bus_name+"</option>";
+							loop++;
+						}
+						display += "</select>"
+						document.getElementById('availableBus').innerHTML = display;
+					}
+					else {
+						var display = "<strong>Choose Bus: </strong>&nbsp<select><option disabled selected>No Bus Available</option></select>";
+						document.getElementById('availableBus').innerHTML = display;
+					}
+				}
+			});
+		}
+
+		function getData(){
+			document.getElementById('bus_id').value = document.getElementById('choose_bus').value;
+			document.getElementById('reserve_date').value = document.getElementById('targetDate').value;
+			document.getElementById('acceptBtn').removeAttribute("disabled");
+		}
 	</script>
 	<?php
 			}
@@ -229,8 +404,39 @@
 					var obj = r;
 					document.getElementById('busname').innerHTML = obj[0].bus_name;
 					document.getElementById('status').innerHTML = obj[0].status;
-					document.getElementById('addSchedBtn').setAttribute("onclick","addSched("+obj[0].id+")");
+					document.getElementById('mvfile_no').innerHTML = obj[0].mvfile_no;
+					document.getElementById('engine_no').innerHTML = obj[0].engine_no;
+					document.getElementById('plate_no').innerHTML = obj[0].plate_no;
+					document.getElementById('denomination').innerHTML = obj[0].denomination;
+					document.getElementById('piston_displacement').innerHTML = obj[0].piston_displacement;
+					document.getElementById('no_of_cylinders').innerHTML = obj[0].no_of_cylinders;
+					document.getElementById('fuel').innerHTML = obj[0].fuel;
+					document.getElementById('make').innerHTML = obj[0].make;
+					document.getElementById('series').innerHTML = obj[0].series;
+					document.getElementById('body_type').innerHTML = obj[0].body_type;
+					document.getElementById('body_no').innerHTML = obj[0].body_no;
+					document.getElementById('year_model').innerHTML = obj[0].year_model;
+					document.getElementById('gross_wt').innerHTML = obj[0].gross_wt;
+					document.getElementById('net_wt').innerHTML = obj[0].net_wt;
+					document.getElementById('shipping_wt').innerHTML = obj[0].shipping_wt;
+					document.getElementById('net_capacity').innerHTML = obj[0].net_capacity;
+					document.getElementById('or_no').innerHTML = obj[0].or_no;
+					document.getElementById('or_date').innerHTML = obj[0].or_date;
+					document.getElementById('driver_name').innerHTML = obj[0].driver_name;
+					document.getElementById('place_name').innerHTML = obj[0].place;
+					//document.getElementById('addSchedBtn').setAttribute("onclick","addSched("+obj[0].id+")");
+					document.getElementById('historyBtn').setAttribute("onclick","history("+obj[0].id+")");
 					document.getElementById('deleteBtn').setAttribute("onclick","deleteBus("+obj[0].id+")");
+					document.getElementById('editBtn').setAttribute("onclick","edit("+obj[0].id+")");
+					if (obj[0].status == "Available") {
+						document.getElementById('onTripSubmitBtn').setAttribute("onclick","setOnTrip("+obj[0].id+")");
+						document.getElementById('maintainBtn').setAttribute("onclick","setOnMaintenance("+obj[0].id+")");	
+					}
+					else if ((obj[0].status == "On Trip")||(obj[0].status == "Maintenance")) {
+						document.getElementById('ifOnTrip').style.display = "initial";
+						document.getElementById('statusBtn').innerHTML = '<button class="btn btn-success btn-sm" type="button" id="onAvailable">Available</button>';
+						document.getElementById('onAvailable').setAttribute("onclick","setAvailable("+obj[0].id+")");
+					}
 				}
 			});
 
@@ -261,6 +467,50 @@
 			});
 		}
 
+		function setOnMaintenance(id){
+			document.getElementById('bus_id_maintain').value = id;
+		}
+
+		function markedAsMaintenance(id){
+			if(document.getElementById('remarksSet').value != ""){
+				if (confirm("Confirm to set MAINTENANCE?")) {
+					document.getElementById('maintainForm').submit();
+				}
+				else {
+					alert("Cancelled.");
+				}
+			}
+			else {
+				alert("Please Enter Remarks.");
+			}
+		}
+
+		function setOnTrip(id){
+			if ((document.getElementById("driver").value != "")&&(document.getElementById("place").value != "")){
+				if (confirm("Confirm to set ON TRIP?")) {
+					document.getElementById("driver_holder").value = document.getElementById("driver").value;
+					document.getElementById("place_holder").value = document.getElementById("place").value;
+					document.getElementById("switchStatId").value = id;
+					document.getElementById("status_name").value = "On Trip";
+					document.getElementById("switchStat").submit();
+				}
+			}
+			else {
+				alert("Please Fill Up all Details.");
+			}
+		}
+
+		function setAvailable(id){
+			if (confirm("Confirm to set AVAILABLE?")) {
+				document.getElementById("switchStatId").value = id;
+				document.getElementById("status_name").value = "Available";
+				document.getElementById("switchStat").submit();
+			}
+		}
+
+		function edit(id){
+			window.location.href = "edit.php?id="+id;
+		}
 		function addSched(id){
 			document.getElementById('bus_id').value = id;
 		}
@@ -310,8 +560,11 @@
 			});
 		}
 
+		function history(id){
+			window.location.href = "history.php?id="+id;
+		}
 		function deleteBus(id){
-			if (confirm("Are you sure to delete this bus? (Schedules will be deleted also)")) {
+			if (confirm("Are you sure to delete this bus? (This will be irreversable)")) {
 				$.ajax({
 					url: 'process/delete_bus.php',
 					type: 'post',

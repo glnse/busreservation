@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 16, 2019 at 05:37 AM
+-- Generation Time: Oct 17, 2019 at 07:22 AM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.6
 
@@ -29,9 +29,43 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `obr_buses` (
-  `id` int(11) NOT NULL,
-  `bus_name` varchar(100) NOT NULL,
-  `status` varchar(10) DEFAULT 'available'
+  `id` int(255) NOT NULL,
+  `bus_name` varchar(500) NOT NULL,
+  `status` varchar(100) NOT NULL DEFAULT 'Available',
+  `driver_name` varchar(100) DEFAULT NULL,
+  `place` varchar(500) DEFAULT NULL,
+  `mvfile_no` varchar(100) NOT NULL,
+  `plate_no` varchar(10) NOT NULL,
+  `engine_no` varchar(50) NOT NULL,
+  `chassis_no` varchar(100) NOT NULL,
+  `denomination` varchar(100) NOT NULL,
+  `piston_displacement` varchar(100) NOT NULL,
+  `no_of_cylinders` varchar(100) NOT NULL,
+  `fuel` varchar(100) NOT NULL,
+  `make` varchar(100) NOT NULL,
+  `series` varchar(100) NOT NULL,
+  `body_type` varchar(100) NOT NULL,
+  `body_no` varchar(100) NOT NULL,
+  `year_model` varchar(4) NOT NULL,
+  `gross_wt` varchar(100) NOT NULL,
+  `net_wt` varchar(100) NOT NULL,
+  `shipping_wt` varchar(100) NOT NULL,
+  `net_capacity` varchar(100) NOT NULL,
+  `or_no` varchar(100) NOT NULL,
+  `or_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `obr_history`
+--
+
+CREATE TABLE `obr_history` (
+  `id` int(255) NOT NULL,
+  `log_body` text NOT NULL,
+  `date_log` date NOT NULL,
+  `bus_id` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -62,6 +96,7 @@ CREATE TABLE `obr_requests` (
 CREATE TABLE `obr_schedules` (
   `id` int(255) NOT NULL,
   `bus_id` int(11) NOT NULL,
+  `request_id` int(255) NOT NULL,
   `reserve_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -97,6 +132,12 @@ ALTER TABLE `obr_buses`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `obr_history`
+--
+ALTER TABLE `obr_history`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `obr_requests`
 --
 ALTER TABLE `obr_requests`
@@ -122,7 +163,13 @@ ALTER TABLE `obr_users`
 -- AUTO_INCREMENT for table `obr_buses`
 --
 ALTER TABLE `obr_buses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `obr_history`
+--
+ALTER TABLE `obr_history`
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `obr_requests`

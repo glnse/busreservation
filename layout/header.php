@@ -17,7 +17,11 @@
 	}
 	?>
 	<title>Online Bus Reservation</title>
-
+	<style>
+	label {
+		padding-top: 10px;
+	}
+	</style>
 </head>
 <body style="background: #CAC531;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to right, #F3F9A7, #CAC531);  /* Chrome 10-25, Safari 5.1-6 */

@@ -8,16 +8,6 @@ if (isset($_GET['id'])) {
     $result = $conn->query($sql) or die($conn->error);
     $rows = array();
     while ($row = $result->fetch_assoc()) {
-        $date = date('Y-m-d');
-        $sql_2 = "SELECT * FROM obr_schedules WHERE bus_id='$id' AND reserve_date='$date'";
-        $scheds = "";
-        $result_2 = $conn->query($sql_2);
-        if ($result_2->num_rows > 0) {
-            $row['status'] = "On Trip";
-        }
-        else {
-            $row['status'] = "Available";
-        }
         $rows[] = $row;
     }
     echo json_encode($rows);
