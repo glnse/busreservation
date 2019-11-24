@@ -14,9 +14,12 @@ if (isset($_POST['submitForm'])) {
 	$purpose = $conn->real_escape_string($_POST['purpose']);
 	$remarks = $conn->real_escape_string($_POST['remarks']);
 	$company = $conn->real_escape_string($_POST['company']);
+	$startDate = $conn->real_escape_string($_POST['startDate']);
+	$endDate = $conn->real_escape_string($_POST['endDate']);
+	$busQty = $conn->real_escape_string($_POST['busqty']);
 
-	if (($fname!="")&&($lname!="")&&($contact!="")&&($email!="")&&($address!="")&&($purpose!="")&&($remarks!="")) {
-		$sql = "INSERT INTO obr_requests (fname,lname,contact,email,address,purpose,remarks,company) VALUES ('$fname','$lname','$contact','$email','$address','$purpose','$remarks','$company')";
+	if (($fname!="")&&($lname!="")&&($contact!="")&&($email!="")&&($address!="")&&($purpose!="")&&($remarks!="")&&($startDate!="")&&($endDate!="")&&($busQty!="")) {
+		$sql = "INSERT INTO obr_requests (fname,lname,contact,email,address,purpose,remarks,company,startDate,endDate,bus_qty) VALUES ('$fname','$lname','$contact','$email','$address','$purpose','$remarks','$company','$startDate','$endDate','$busQty')";
 		if ($conn->query($sql)) {
 			echo "<script>Swal.fire('Success','Request Submitted.','success');</script>";
 		}
@@ -78,6 +81,27 @@ elseif (!isset($_POST['confirm'])) {
 							<div class="form-group">
 								<label for="">Address</label>
 								<input type="text" class="form-control" name="address" id="address">
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<h5>Reservation Period</h5>
+						</div>
+						<div class="col-sm-5">
+							<div class="form-group">
+								<label for="">Start Date</label>
+								<input type="date" class="form-control" name="startDate" id="startDate">
+							</div>
+						</div>
+						<div class="col-sm-5">
+							<div class="form-group">
+								<label for="">End Date</label>
+								<input type="date" class="form-control" name="endDate" id="endDate">
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="form-group">
+								<label for="">Bus Qty</label>
+								<input type="number" class="form-control" name="busqty" id="busqty">
 							</div>
 						</div>
 						<div class="col-sm-12">

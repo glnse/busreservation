@@ -17,14 +17,16 @@
 					<strong>Last Name: </strong><span id="lname"></span><br/>
 					<strong>Contact: </strong><span id="contact"></span><br/>
 					<strong>Email: </strong><span id="email"></span><br/>
-					<strong>Address: </strong><span id="address"></span><br/><br/>
+					<strong>Address: </strong><span id="address"></span><br/>
+					<strong>Bus Qty: </strong><span id="busqty"></span><br/><br/>
 					<strong>Purpose: </strong>
 					<div id="purpose"></div><br/>
 					<strong>Remarks: </strong>
 					<div id="remarks"></div>
 					<div id="enterDate">
 					<hr/>
-					<strong>Enter Reservation Date: </strong>&nbsp<input type="date" id="targetDate" onchange="availBus();"/>
+					<strong>Start Date: </strong>&nbsp<input type="text" id="startDate" readonly/><br/>
+					<strong>End Date: </strong>&nbsp<input type="text" id="endDate" readonly/>
 					</div>
 					<div id="availableBus"></div>
 				</div>
@@ -36,7 +38,26 @@
 						<input type="hidden" id="reserve_date" name="reserve_date">
 					</form>
 					<button class="btn btn-success" type="button" id="acceptBtn" onclick="statusSet('accept')" disabled>Accept</button>
-					<button class="btn btn-danger" type="button" id="rejectBtn" onclick="statusSet('reject')">Reject</button>
+					<button class="btn btn-danger" type="button" id="rejectBtn" data-target="#rejectModal" data-toggle="modal">Reject</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Reason for Disapproval</h5>
+					<button class="close" type="button" data-dismiss="modal"><span>&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<select class="form-control">
+						<option>No Bus Available</option>
+						<option>Invalid Purpose</option>
+					</select>
+				</div>
+				<div class="modal-footer" id="footerModal">
+					<button class="btn btn-danger" type="button" id="rejectBtn" onclick="statusSet('reject')">Submit</button>
 				</div>
 			</div>
 		</div>
@@ -290,6 +311,7 @@
 			if($pageSection=="index"){
 	?>
 	<script type="text/javascript">
+		var busqty = 0;
 		$(window).ready(function(){
 			$("#table").DataTable({
 				"ajax" : {
@@ -322,12 +344,17 @@
 					document.getElementById('purpose').innerHTML = obj[0].purpose;
 					document.getElementById('remarks').innerHTML = obj[0].remarks;
 					document.getElementById('request_id').value = obj[0].id;
+					console.log(obj[0].startDate);
+					document.getElementById('startDate').value = obj[0].startDate;
+					document.getElementById('endDate').value = obj[0].endDate;
+					document.getElementById('busqty').innerHTML = obj[0].bus_qty;
+					busqty = parseInt(obj[0].bus_qty);
 					if ((obj[0].status == "accepted")||(obj[0].status == "rejected")){
 						document.getElementById('footerModal').style.display = "none";
 						document.getElementById('enterDate').style.display = "none";
 					}
 				}
-			});
+			}).then(() => availBus());
 		}
 
 		function statusSet(status){
@@ -336,30 +363,40 @@
 		}
 
 		function availBus(){
-			var reserve_date = document.getElementById('targetDate').value;
+			var startDate = document.getElementById('startDate').value;
+			var endDate = document.getElementById('endDate').value;
+			
 			$.ajax({
 				url: 'process/check_bus.php',
 				type: 'get',
 				data: {
-					date: reserve_date
+					qty: busqty,
+					toDate: endDate,
+					fromDate: startDate
 				},
 				success: function(r){
-					var obj = JSON.parse(r);
+					var obj = JSON.parse(JSON.stringify(r))	;
+					console.log(r);
 					if (obj.length > 0){
 						document.getElementById('acceptBtn').setAttribute("disabled","");
 						var loopCnt = obj.length;
-						var loop = 0;
-						var display = "<strong>Choose Bus: </strong>&nbsp<select id='choose_bus' onchange='getData();'>";
-						display += "<option disabled selected>Choose Bus</option>";
-						while (loop < loopCnt){
-							display += "<option value='"+obj[loop].id+"'>"+obj[loop].bus_name+"</option>";
-							loop++;
+						var loopBusQty = 1;
+						var display = "";
+						while (loopBusQty <= busqty){
+							display += "<br/><strong>Choose Bus "+loopBusQty+": </strong>&nbsp<select id='choose_bus"+loopBusQty+"' onchange='getData();'>";
+							display += "<option disabled selected>Choose Bus</option>";
+							var loop = 0;
+							while (loop < loopCnt){
+						 		display += "<option value='"+obj[loop].id+"'>"+obj[loop].bus_name+"</option>";
+						 		loop++;
+						 	}
+						 	display += "</select><br/>";
+						 	loopBusQty++;
 						}
-						display += "</select>"
-						document.getElementById('availableBus').innerHTML = display;
+					 	document.getElementById('availableBus').innerHTML = display;
 					}
 					else {
-						var display = "<strong>Choose Bus: </strong>&nbsp<select><option disabled selected>No Bus Available</option></select>";
+						var display = "<strong><br/>No Bus Available</strong>";
 						document.getElementById('availableBus').innerHTML = display;
 					}
 				}
@@ -367,9 +404,56 @@
 		}
 
 		function getData(){
-			document.getElementById('bus_id').value = document.getElementById('choose_bus').value;
-			document.getElementById('reserve_date').value = document.getElementById('targetDate').value;
-			document.getElementById('acceptBtn').removeAttribute("disabled");
+			var loop = 1;
+			var data = [];
+			while (loop<=busqty){
+				if (document.getElementById('choose_bus'+loop).value != "Choose Bus"){
+					data.push(document.getElementById('choose_bus'+loop).value);
+					loop++;
+				}
+				else {
+					data = [];
+					break;
+				}
+			}
+			console.log(JSON.stringify(data));
+			document.getElementById('reserve_date').value = document.getElementById('startDate').value+"#"+document.getElementById('endDate').value;
+			var duplicated = false;
+			if (data.length > 0){
+				loop = 0;
+				while (loop < data.length){
+					var loopCheck = 0;
+					while (loopCheck < data.length){
+						if (loop != loopCheck){
+							if (data[loop] == data[loopCheck]){
+								duplicated = true;
+								break;
+							}
+							else {
+								console.log("test");
+								loopCheck++;
+							}
+						}
+						else {
+							loopCheck++;
+						}
+					}
+					if (duplicated) {
+						break;
+					}
+					else {
+						loop++;
+					}
+				}
+
+				if(duplicated){
+					alert("There should be no Same Bus");
+				}
+				else {
+					document.getElementById('acceptBtn').removeAttribute("disabled");
+					document.getElementById('bus_id').value = JSON.stringify(data);
+				}
+			}
 		}
 	</script>
 	<?php

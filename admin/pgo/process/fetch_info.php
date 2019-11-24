@@ -7,6 +7,8 @@ if (isset($_GET['id'])) {
     $result = $conn->query($sql) or die($conn->error);
     $rows = array();
     while ($row = $result->fetch_assoc()) {
+        $row['startDate'] = date("m/d/Y",strtotime($row['startDate']));
+        $row['endDate'] = date("m/d/Y",strtotime($row['endDate']));
         $rows[] = $row;
     }
     echo json_encode($rows);
