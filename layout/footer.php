@@ -34,11 +34,12 @@
 					<form id="statusSet" action="process/status_set.php" method="POST">
 						<input type="hidden" id="request_id" name="id">
 						<input type="hidden" id="status" name="status">
-						<input type="hidden" id="bus_id" name="bus_id">
-						<input type="hidden" id="reserve_date" name="reserve_date">
+						<input type="hidden" id="bus_id" name="bus_id" value="">
+						<input type="hidden" id="reserve_date" name="reserve_date" value="">
+						<input type="hidden" id="reason" name="reason" value="No Bus Available">
 					</form>
-					<button class="btn btn-success" type="button" id="acceptBtn" onclick="statusSet('accept')" disabled>Accept</button>
-					<button class="btn btn-danger" type="button" id="rejectBtn" data-target="#rejectModal" data-toggle="modal">Reject</button>
+					<button class="btn btn-success" type="button" id="acceptBtn" onclick="statusSet('accept')" disabled>Approve</button>
+					<button class="btn btn-danger" type="button" id="rejectBtn" data-target="#rejectModal" data-toggle="modal">Disapprove</button>
 				</div>
 			</div>
 		</div>
@@ -51,9 +52,10 @@
 					<button class="close" type="button" data-dismiss="modal"><span>&times;</span></button>
 				</div>
 				<div class="modal-body">
-					<select class="form-control">
+					<select class="form-control" onchange="document.getElementById('reason').value=this.value;">
 						<option>No Bus Available</option>
 						<option>Invalid Purpose</option>
+						<option>Cancelled By Client</option>
 					</select>
 				</div>
 				<div class="modal-footer" id="footerModal">
