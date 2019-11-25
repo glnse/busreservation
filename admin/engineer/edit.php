@@ -28,7 +28,7 @@ include('../../layout/header.php');
         <div class="card">
             <div class="card-body">
                 <h3>Bus Name: <?= $row['bus_name'];?></h3>
-                <form method="POST" action="process/update_bus.php">
+                <form method="POST" action="process/update_bus.php?id=<?= $_GET['id'];?>">
                     <label>Bus Name</label>
                     <input type="text" class="form-control" name="bus" value="<?= $row['bus_name'];?>">
                     <label>MV FILE NO.</label>

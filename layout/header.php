@@ -21,12 +21,29 @@
 	label {
 		padding-top: 10px;
 	}
+	
+	.background-img {
+	width: 1366;
+	height: 768px;
+	display: block;
+	position: absolute;
+	content: "";
+	background: url('<?php echo baseURL(); ?>images/bg.jpeg');
+	background-size: 100%;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	opacity: 0.5;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+	z-index: -1;   
+	}
 	</style>
 </head>
-<body style="background: #CAC531;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #F3F9A7, #CAC531);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #F3F9A7, #CAC531); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-">
+<body style="background-color: rgba(256,256,256,0.6);">
+	<div class="background-img" style="position: fixed; "></div>
 	<div class="container-fluid">
 		<div class="container">
 			<div class="row py-3 no-gutters align-items-center justify-content-center text-center">
