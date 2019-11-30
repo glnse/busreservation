@@ -77,7 +77,7 @@
 				else if ($section="engineer"){
 				?>
 				<div class="col-sm-5">
-				<a href="index.php" class="badge badge-pill badge-info p-3">Buses</a> | <a href="settings.php" class="badge badge-pill badge-info p-3">Settings</a> | <a href="<?= baseURL(); ?>admin/logout.php" class="badge badge-pill badge-danger p-3">Log Out</a>
+				<a href="index.php" class="badge badge-pill badge-info p-3">Buses</a> | <a href="calendar.php" class="badge badge-pill badge-info p-3">Calendar</a> |<a href="settings.php" class="badge badge-pill badge-info p-3">Settings</a> | <a href="<?= baseURL(); ?>admin/logout.php" class="badge badge-pill badge-danger p-3">Log Out</a>
 				</div>
 				<?php
 				}
