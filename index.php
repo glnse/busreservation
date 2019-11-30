@@ -65,7 +65,7 @@ include('layout/header.php');
 					</div>
 				</p>
 				<center>
-					<form method="POST" action="form.php">
+					<form method="POST" action="calendar.php">
 						<hr/>
 						<input type="checkbox" name="confirm" required>&nbspI agree to the Policy Statement and Guidelines
 						<hr/>

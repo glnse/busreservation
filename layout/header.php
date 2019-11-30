@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" type="text/css" href="<?= baseURL(); ?>css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="<?= baseURL(); ?>css/styles.css">
+	<link rel="stylesheet" type="text/css" href="https://fullcalendar.io/js/fullcalendar-2.2.5/fullcalendar.css">
 	<script type="text/javascript" src="<?= baseURL(); ?>js/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="<?= baseURL(); ?>js/sweetalert2@8.js"></script>
+	<script src="https://fullcalendar.io/js/fullcalendar-2.2.5/lib/moment.min.js"></script>
+	<script src="https://fullcalendar.io/js/fullcalendar-2.2.5/fullcalendar.min.js"></script>
 	<?php
 	if (isset($section)) {
 	?>
@@ -21,7 +24,7 @@
 	label {
 		padding-top: 10px;
 	}
-	
+
 	.background-img {
 	width: 1366;
 	height: 768px;

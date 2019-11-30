@@ -14,12 +14,13 @@ if (isset($_POST['submitForm'])) {
 	$purpose = $conn->real_escape_string($_POST['purpose']);
 	$remarks = $conn->real_escape_string($_POST['remarks']);
 	$company = $conn->real_escape_string($_POST['company']);
-	$startDate = $conn->real_escape_string($_POST['startDate']);
+	$startDate = date("Y-m-d",strtotime($conn->real_escape_string($_POST['startDate'])));
 	$endDate = $conn->real_escape_string($_POST['endDate']);
 	$busQty = $conn->real_escape_string($_POST['busqty']);
+	$passengers = $conn->real_escape_string($_POST['passengers']);
 
 	if (($fname!="")&&($lname!="")&&($contact!="")&&($email!="")&&($address!="")&&($purpose!="")&&($remarks!="")&&($startDate!="")&&($endDate!="")&&($busQty!="")) {
-		$sql = "INSERT INTO obr_requests (fname,lname,contact,email,address,purpose,remarks,company,startDate,endDate,bus_qty) VALUES ('$fname','$lname','$contact','$email','$address','$purpose','$remarks','$company','$startDate','$endDate','$busQty')";
+		$sql = "INSERT INTO obr_requests (fname,lname,contact,email,address,purpose,remarks,company,startDate,endDate,bus_qty,passengers) VALUES ('$fname','$lname','$contact','$email','$address','$purpose','$remarks','$company','$startDate','$endDate','$busQty','$passengers')";
 		if ($conn->query($sql)) {
 			echo "<script>Swal.fire('Success','Request Submitted.','success');</script>";
 		}
@@ -31,9 +32,9 @@ if (isset($_POST['submitForm'])) {
 		echo "<script>Swal.fire('Invalid','Please Fill Up all Fields.','error');</script>";
 	}
 }
-elseif (!isset($_POST['confirm'])) {
-	header('Location: index.php');
-}
+
+$timestamp = $_GET['time']/1000;
+$date = date('m/d/Y',$timestamp);
 ?>
 <div class="row justify-content-center">
 	<div class="col-sm-6">
@@ -86,22 +87,28 @@ elseif (!isset($_POST['confirm'])) {
 						<div class="col-sm-12">
 							<h5>Reservation Period</h5>
 						</div>
-						<div class="col-sm-5">
+						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="">Start Date</label>
-								<input type="date" class="form-control" name="startDate" id="startDate">
+								<input type="text" class="form-control" name="startDate" id="startDate" value="<?php echo $date; ?>" readonly>
 							</div>
 						</div>
-						<div class="col-sm-5">
+						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="">End Date</label>
 								<input type="date" class="form-control" name="endDate" id="endDate">
 							</div>
 						</div>
-						<div class="col-sm-2">
+						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="">Bus Qty</label>
 								<input type="number" class="form-control" name="busqty" id="busqty">
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="">Passengers</label>
+								<input type="number" class="form-control" name="passengers" id="passengers">
 							</div>
 						</div>
 						<div class="col-sm-12">

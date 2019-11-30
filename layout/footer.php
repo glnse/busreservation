@@ -323,6 +323,7 @@
 				"columns" : [
 					{ data : "fname"},
 					{ data : "lname"},
+					{ data : "requestDate"},
 					{ data : "status"},
 					{ data : "action"}
 				]
@@ -352,6 +353,7 @@
 					document.getElementById('busqty').innerHTML = obj[0].bus_qty;
 					busqty = parseInt(obj[0].bus_qty);
 					if ((obj[0].status == "accepted")||(obj[0].status == "rejected")){
+						document.getElementById('availableBus').style.display = "none";
 						document.getElementById('footerModal').style.display = "none";
 						document.getElementById('enterDate').style.display = "none";
 					}

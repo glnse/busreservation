@@ -22,6 +22,7 @@ include('../../layout/header.php');
                             <tr>
                                 <th>First Name</th>
                                 <th>Last Name</th>
+                                <th>Request Date</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>

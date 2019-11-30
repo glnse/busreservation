@@ -2,7 +2,7 @@
 date_default_timezone_set("Asia/Manila");
 header("Content-type: application/json; charset=utf-8");
 include("../../../config/connection.php");
-$sql = "SELECT id, fname, lname, status FROM obr_requests ORDER BY id DESC";
+$sql = "SELECT id, fname, lname, requestDate, status FROM obr_requests ORDER BY id DESC";
 $result = $conn->query($sql) or die($conn->error);
 $rows = array();
 while ($row = $result->fetch_assoc()) {
@@ -15,7 +15,7 @@ while ($row = $result->fetch_assoc()) {
     else{
         $row['status']='<span class="badge badge-primary p-2">Pending</span>';
     }
-    $rows[] = array("fname" => $row['fname'],"lname" => $row['lname'],"status" => $row['status'],"action" => "<button class=\"btn btn-info\" type=\"button\" data-toggle=\"modal\" data-target=\"#testModal\" onclick=\"showData(".$row['id'].")\">View</button>");
+    $rows[] = array("fname" => $row['fname'],"lname" => $row['lname'],"requestDate" => $row['requestDate'],"status" => $row['status'],"action" => "<button class=\"btn btn-info\" type=\"button\" data-toggle=\"modal\" data-target=\"#testModal\" onclick=\"showData(".$row['id'].")\">View</button>");
 }
 echo json_encode($rows);
 ?>
